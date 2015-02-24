@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8">
+<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />
+</head>
+<body ng-controller="MainController">
+ <nav class=" navbar navbar-inverse">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Image Processing</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">           
+		   <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">File <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#" onclick="$('#fileInput').click();">Open</a></li>
+                <li><a href="#">Save</a></li>
+                <li><a href="#">SaveAs</a></li>
+               <!-- <li class="divider"></li>
+                <li class="dropdown-header">Nav header</li>
+                <li><a href="#">Separated link</a></li>
+                <li><a href="#">One more separated link</a></li>-->
+              </ul>
+            </li>
+			<li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">Adjust<span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+				<li><a href="#brContrastModal"  data-toggle="modal">Brighness & Contrast</a></li>              
+                <li><a href="#rgbaModal"  data-toggle="modal">Red,Green,Blue</a></li>
+               <li><a href="#hsvModal"  data-toggle="modal">Hue,Saturation,Intensity</a></li>
+			   <li><a href="#invertModal"  data-toggle="modal" onclick="invert();">Invert</a></li>
+			   <li><a href="#invertModal"  data-toggle="modal" onclick="edgeDetect();">EdgeDetect</a></li>
+			   <li><a href="#invertModal"  data-toggle="modal" onclick="avgBlur();">Blur</a></li>
+			   <li><a href="#invertModal"  data-toggle="modal" onclick="sharp();">Sharp</a></li>
+
+               <!-- <li class="divider"></li>
+                <li class="dropdown-header">Nav header</li>
+                <li><a href="#">Separated link</a></li>
+                <li><a href="#">One more separated link</a></li>-->
+              </ul>
+            </li>
+			
+          </ul>
+		  <ul class="nav navbar-nav navbar-right">           
+            <li><a href="https://github.com/java-scripts">	View On GitHub</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+<div class="container" >
+	<input type="file" id="fileInput" accept="image/*" style="display:none;">
+	<canvas id="canvas" width="640" height="60"></canvas>	
+
+	<div id="rgbaModal" class="modal fade" data-backdrop="false">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form>
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					 <h4 class="modal-title">Adjust Red, Green, Blue and Opacity</h4>
+
+				</div>
+				<div class="modal-body">					
+					<div class="row">
+						<div class="col-md-2">
+							Cyan
+						</div>
+						<div class="col-md-8">
+							<input type="range" id="r" min="-125" max="125" value="0" onchange="setRGBA();"><br>
+						</div>
+						<div class="col-md-2">
+							Red
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-2">
+							Magenta
+						</div>
+						<div class="col-md-8">
+							<input type="range" id="g" min="-125" max="125" value="0" onchange="setRGBA();"><br>
+						</div>
+						<div class="col-md-2">
+							Green
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-2">
+							Yellow
+						</div>
+						<div class="col-md-8">
+							<input type="range" id="b" min="-125" max="125" value="0" onchange="setRGBA();"><br>
+						</div>
+						<div class="col-md-2">
+							Blue
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-2">
+							Opacity
+						</div>
+						<div class="col-md-8">
+							<input type="range" id="a" min="0" max="255" value="255" onchange="setRGBA();">
+						</div>						
+					</div>				
+				</div>
+				<div class="modal-footer">					
+					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancelChanges(this)" >Cancel</button>
+					<button type="button" class="btn btn-primary" onclick="saveChanges(this)">Save changes</button>
+				</div>
+				</form>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	
+	<div id="hsvModal" class="modal fade" data-backdrop="false">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form>
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					 <h4 class="modal-title">Adjust Hue, Saturation and Intensity</h4>
+
+				</div>
+				<div class="modal-body">					
+					<div class="row">
+						<div class="col-md-2">
+							Hue
+						</div>
+						<div class="col-md-8">
+							<input type="range" id="h" min="0" max="255" value="0" onchange="setHSV();"><br>
+						</div>						
+					</div>
+					<div class="row">
+						<div class="col-md-2">
+							Saturation
+						</div>
+						<div class="col-md-8">
+							<input type="range" id="s" min="0" max="1" value="1" step="0.1" onchange="setHSV();"><br>
+						</div>						
+					</div>
+					<div class="row">
+						<div class="col-md-2">
+							Intensity
+						</div>
+						<div class="col-md-8">
+							<input type="range" id="v" min="0" max="2" value="1"  step="0.1" onchange="setHSV();">
+						</div>						
+					</div>									
+				</div>
+				<div class="modal-footer">					
+					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancelChanges(this)" >Cancel</button>
+					<button type="button" class="btn btn-primary" onclick="saveChanges(this)">Save changes</button>
+				</div>
+				</form>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+			
+	<div id="brContrastModal" class="modal fade" data-backdrop="false">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form>
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					 <h4 class="modal-title">Adjust Brightness & Contrast</h4>
+
+				</div>
+				<div class="modal-body">					
+					<div class="row">
+						<div class="col-md-2">
+							Brightness
+						</div>
+						<div class="col-md-8">
+							<input type="range" id="brightness" min="-125" max="125" value="0" onchange="setBrContrast();"><br>
+						</div>						
+					</div>
+					<div class="row">
+						<div class="col-md-2">
+							Contrast
+						</div>
+						<div class="col-md-8">
+							<input type="range" id="contrast" min="0.01" max="2" step="0.02" value="1" onchange="setBrContrast();">
+						</div>						
+					</div>														
+				</div>
+				<div class="modal-footer">					
+					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancelChanges(this)" >Cancel</button>
+					<button type="button" class="btn btn-primary" onclick="saveChanges(this)">Save changes</button>
+				</div>
+				</form>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	
+	<div id="invertModal" class="modal fade" data-backdrop="false">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form>
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					 <h4 class="modal-title">Invert Colors</h4>
+
+				</div>
+				
+				<div class="modal-footer">					
+					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancelChanges(this)" >Cancel</button>
+					<button type="button" class="btn btn-primary" onclick="saveChanges(this)">Save changes</button>
+				</div>
+				</form>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	
+		
+	
+</div><!--container-->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/jquery-ui.js"></script>
+
+<script src="js/imageprocess.js"></script>
+<script src="js/controller.js"></script>
+<script>
+
+
+
+</script>
+</body>
+</html>
