@@ -105,3 +105,11 @@ function sharp(){
 		});
 	ctx.putImageData(dst,0,0);
 }
+function sketch(){
+	impro.sketch({
+		src:src,
+		dst:dst,	
+		f:impro.Filters.Sharp.laplace1,
+		});
+	ctx.putImageData(dst,0,0);
+}

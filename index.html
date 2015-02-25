@@ -35,10 +35,11 @@
 				<li><a href="#brContrastModal"  data-toggle="modal">Brighness & Contrast</a></li>              
                 <li><a href="#rgbaModal"  data-toggle="modal">Red,Green,Blue</a></li>
                <li><a href="#hsvModal"  data-toggle="modal">Hue,Saturation,Intensity</a></li>
-			   <li><a href="#invertModal"  data-toggle="modal" onclick="invert();">Invert</a></li>
-			   <li><a href="#invertModal"  data-toggle="modal" onclick="edgeDetect();">EdgeDetect</a></li>
-			   <li><a href="#invertModal"  data-toggle="modal" onclick="avgBlur();">Blur</a></li>
-			   <li><a href="#invertModal"  data-toggle="modal" onclick="sharp();">Sharp</a></li>
+			   <li><a href="#commonModal"  data-toggle="modal" onclick="$('#commonModal .modal-title').text('Invert');invert();">Invert</a></li>
+			   <li><a href="#commonModal"  data-toggle="modal" onclick="$('#commonModal .modal-title').text('EdgeDetect');edgeDetect();">EdgeDetect</a></li>
+			   <li><a href="#commonModal"  data-toggle="modal" onclick="$('#commonModal .modal-title').text('Blur');avgBlur();">Blur</a></li>
+			   <li><a href="#commonModal"  data-toggle="modal" onclick="$('#commonModal .modal-title').text('Sharp');sharp();">Sharp</a></li>
+			   <li><a href="#commonModal"  data-toggle="modal" onclick="$('#commonModal .modal-title').text('Sketch');sketch();">Sketch</a></li>
 
                <!-- <li class="divider"></li>
                 <li class="dropdown-header">Nav header</li>
@@ -199,16 +200,22 @@
 		</div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
 	
-	<div id="invertModal" class="modal fade" data-backdrop="false">
+	<div id="commonModal" class="modal fade" data-backdrop="false">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<form>
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					 <h4 class="modal-title">Invert Colors</h4>
+					 <h4 class="modal-title"></h4>
 
 				</div>
-				
+				<div class="modal-body">
+					<div class="progress">
+					  <div class="progress-bar progress-bar-striped active" role="progressbar" id="progress" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+						<span class="sr-only">45% Complete</span>
+					  </div>
+					</div>
+				</div>
 				<div class="modal-footer">					
 					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancelChanges(this)" >Cancel</button>
 					<button type="button" class="btn btn-primary" onclick="saveChanges(this)">Save changes</button>

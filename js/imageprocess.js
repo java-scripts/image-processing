@@ -134,6 +134,19 @@ and callbacks with the orgumnets img, evt
 				d[i+3]=255;			
 			}		
 		},
+		sketch:function(settings){
+			var s = settings.src.data;
+			var d = settings.dst.data;						
+			for(var i=0;i<s.length;i+=4){
+				hsb=rgbToHsv(s[i],s[i+1],s[i+2]);
+				rgb=hsvToRgb(step(hsb[0]),step(hsb[1]),step(hsb[2]));		
+				d[i]=rgb[0];	
+				d[i+1]=rgb[1];
+				d[i+2]=rgb[2];	
+							
+			}
+			function step(v){return Math.min(255,Math.round(v/100)*100)}
+		},
 		applyFilter:function(settings){			
 			var imageData = settings.src;
 			var s = settings.src.data;
@@ -141,8 +154,12 @@ and callbacks with the orgumnets img, evt
 			var f = settings.f;		
 			var w = imageData.width;
 			for (x=0;x<imageData.width; x++) {
-				for(y=0;y<imageData.height;y++){					
-					k = getk(x,y,w);				
+				for(y=0;y<imageData.height;y++){
+					filterOnpixel(x,y);								
+				}
+			}
+			function filterOnpixel(x,y){
+				k = getk(x,y,w);				
 					dr=0;dg=0;db=0;
 					xcenter=(f.length-1)/2;
 					ycenter=(f[0].length-1)/2;
@@ -155,9 +172,8 @@ and callbacks with the orgumnets img, evt
 					}				
 					d[k]=dr;
 					d[k+1]=dg;
-					d[k+2]=db;				
-				}
-			}		
+					d[k+2]=db;	
+			}
 		},
 		applyFilterChannel:function(settings){			
 			var imageData = settings.src;
