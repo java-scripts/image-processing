@@ -22,6 +22,18 @@
 	
 }());
 
+function saveChanges(el){
+	src = impro.copyImageData({ctx:ctx,src:dst});
+	$(el).closest('form').reset();
+	$(el).closest('.controls').hide();
+}
+
+function cancelChanges(el){
+	$(el).closest('form').reset();
+	dst = impro.copyImageData({ctx:ctx,src:src});	
+	ctx.putImageData(dst,0,0);	
+}
+
 
 function invert(){
 	impro.invert({src:src,dst:dst});
@@ -60,17 +72,6 @@ function setBrContrast(){
 	ctx.putImageData(dst,0,0);
 }
 
-function saveChanges(el){
-	src = impro.copyImageData({ctx:ctx,src:dst});
-	$(el).closest('form')[0].reset();
-	$(el).closest('.controls').hide();
-}
-
-function cancelChanges(el){
-	$(el).closest('form')[0].reset();
-	dst = impro.copyImageData({ctx:ctx,src:src});	
-	ctx.putImageData(dst,0,0);	
-}
 
 
 
@@ -112,3 +113,41 @@ function sketch(){
 		});
 	ctx.putImageData(dst,0,0);
 }
+
+function customFilter(n){
+	console.log(n)
+	var t = $('#custom-data-form .data');
+	var a = $('#custom-data-form .action');
+	var html='';
+	 defaultf=[[1,1,1],[1,-8,1],[1,1,1]];
+	 cf=[];
+	for(var i=0;i<n;i++){				
+		for(var j=0;j<n;j++){
+			html+='<input type="text" class="col-md-4 cftext" value="'+defaultf[i][j]+'" style="padding: 1px;">';		
+		}
+	}
+	t.html(html);	
+	html='<button class="btn btn-primary action-btn" >Apply</button> ';
+	html+='<button class="btn btn-primary reset-btn" >Reset</button>';
+	a.html(html);	
+	$('.action-btn').click(function(){
+		cf=[[],[],[]];
+		$('.cftext').each(function(i){			
+			cf[Math.floor(i/3)].push($(this).val()*1)
+		});
+		impro.applyFilter({
+			src:src,
+			dst:dst,	
+			f:cf,
+			});
+		ctx.putImageData(dst,0,0);
+	});
+	
+	$('.reset-btn').click(function(e){
+		$(this).closest('form').reset();
+		dst = impro.copyImageData({ctx:ctx,src:src});	
+		ctx.putImageData(dst,0,0);	
+	});
+}
+
+
