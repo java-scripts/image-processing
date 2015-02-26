@@ -2,6 +2,7 @@
 <html lang="en">
 <head><meta charset="UTF-8">
 <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />
+<link rel="stylesheet" href="css/custom.css" type="text/css" />
 </head>
 <body ng-controller="MainController">
  <nav class=" navbar navbar-inverse">
@@ -21,8 +22,8 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">File <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
                 <li><a href="#" onclick="$('#fileInput').click();">Open</a></li>
-                <li><a href="#">Save</a></li>
-                <li><a href="#">SaveAs</a></li>
+               <!-- <li><a href="#">Save</a></li>
+                <li><a href="#">SaveAs</a></li>-->
                <!-- <li class="divider"></li>
                 <li class="dropdown-header">Nav header</li>
                 <li><a href="#">Separated link</a></li>
@@ -30,21 +31,25 @@
               </ul>
             </li>
 			<li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">Adjust<span class="caret"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">Image Adjust<span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
-				<li><a href="#brContrastModal"  data-toggle="modal">Brighness & Contrast</a></li>              
-                <li><a href="#rgbaModal"  data-toggle="modal">Red,Green,Blue</a></li>
-               <li><a href="#hsvModal"  data-toggle="modal">Hue,Saturation,Intensity</a></li>
-			   <li><a href="#commonModal"  data-toggle="modal" onclick="$('#commonModal .modal-title').text('Invert');invert();">Invert</a></li>
-			   <li><a href="#commonModal"  data-toggle="modal" onclick="$('#commonModal .modal-title').text('EdgeDetect');edgeDetect();">EdgeDetect</a></li>
-			   <li><a href="#commonModal"  data-toggle="modal" onclick="$('#commonModal .modal-title').text('Blur');avgBlur();">Blur</a></li>
-			   <li><a href="#commonModal"  data-toggle="modal" onclick="$('#commonModal .modal-title').text('Sharp');sharp();">Sharp</a></li>
-			   <li><a href="#commonModal"  data-toggle="modal" onclick="$('#commonModal .modal-title').text('Sketch');sketch();">Sketch</a></li>
-
+				<li><a href="#brContrastModal"  data-toggle="controls">Brighness & Contrast</a></li>              
+                <li><a href="#rgbaModal"  data-toggle="controls">Red,Green,Blue</a></li>
+               <li><a href="#hsvModal"  data-toggle="controls">Hue,Saturation,Intensity</a></li>
+			   <li><a href="#commonModal"  data-toggle="controls" onclick="$('#commonModal .modal-title').text('Invert');invert();">Invert</a></li>
                <!-- <li class="divider"></li>
                 <li class="dropdown-header">Nav header</li>
                 <li><a href="#">Separated link</a></li>
                 <li><a href="#">One more separated link</a></li>-->
+              </ul>
+            </li>
+			<li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">Filters<span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+			   <li><a href="#commonModal"  data-toggle="controls" onclick="$('#commonModal .modal-title').text('EdgeDetect');edgeDetect();">EdgeDetect</a></li>
+			   <li><a href="#commonModal"  data-toggle="controls" onclick="$('#commonModal .modal-title').text('Blur');avgBlur();">Blur</a></li>
+			   <li><a href="#commonModal"  data-toggle="controls" onclick="$('#commonModal .modal-title').text('Sharp');sharp();">Sharp</a></li>
+			   <li><a href="#commonModal"  data-toggle="controls" onclick="$('#commonModal .modal-title').text('Sketch');sketch();">Sketch</a></li>
               </ul>
             </li>
 			
@@ -57,11 +62,15 @@
     </nav>
 <div class="container" >
 	<input type="file" id="fileInput" accept="image/*" style="display:none;">
-	<canvas id="canvas" width="640" height="60"></canvas>	
+	<div class="row">
+		<div class="col-md-8">
+			<canvas id="canvas" width="640" height="60"></canvas>	
+		</div>
+		<div class="col-md-4">
+				
 
-	<div id="rgbaModal" class="modal fade" data-backdrop="false">
-		<div class="modal-dialog">
-			<div class="modal-content">
+	
+			<div id="rgbaModal" class="modal-content controls">
 				<form>
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -117,12 +126,9 @@
 				</div>
 				</form>
 			</div><!-- /.modal-content -->
-		</div><!-- /.modal-dialog -->
-	</div><!-- /.modal -->
-	
-	<div id="hsvModal" class="modal fade" data-backdrop="false">
-		<div class="modal-dialog">
-			<div class="modal-content">
+		
+		
+			<div id="hsvModal" class="modal-content controls">
 				<form>
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -161,12 +167,9 @@
 				</div>
 				</form>
 			</div><!-- /.modal-content -->
-		</div><!-- /.modal-dialog -->
-	</div><!-- /.modal -->
-			
-	<div id="brContrastModal" class="modal fade" data-backdrop="false">
-		<div class="modal-dialog">
-			<div class="modal-content">
+
+	
+			<div id="brContrastModal" class="modal-content controls" >
 				<form>
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -197,12 +200,8 @@
 				</div>
 				</form>
 			</div><!-- /.modal-content -->
-		</div><!-- /.modal-dialog -->
-	</div><!-- /.modal -->
 	
-	<div id="commonModal" class="modal fade" data-backdrop="false">
-		<div class="modal-dialog">
-			<div class="modal-content">
+			<div id="commonModal" class="modal-content controls" >
 				<form>
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -222,21 +221,26 @@
 				</div>
 				</form>
 			</div><!-- /.modal-content -->
-		</div><!-- /.modal-dialog -->
-	</div><!-- /.modal -->
-	
 		
+
+		</div><!--2nd col controls col-->
+	</div>
+	
 	
 </div><!--container-->
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
-<script src="js/jquery-ui.js"></script>
-
 <script src="js/imageprocess.js"></script>
 <script src="js/controller.js"></script>
 <script>
 
-
+$('[data-toggle=controls]').click(function(e){
+	$('.controls').hide();
+	$($(this).attr('href')).show();
+})
+$('[data-dismiss=modal]').click(function(e){
+	$(this).closest('.controls').hide();
+})
 
 </script>
 </body>

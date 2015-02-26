@@ -18,10 +18,7 @@
 		dst = impro.copyImageData({ctx:ctx,src:src});		
 		ctx.putImageData(dst,0,0);	
 	}
-
-	$(".modal").draggable();
-
-
+	
 }());
 
 
@@ -65,7 +62,7 @@ function setBrContrast(){
 function saveChanges(el){
 	src = impro.copyImageData({ctx:ctx,src:dst});
 	$(el).closest('form')[0].reset();
-	$(el).closest('.modal').modal('hide');
+	$(el).closest('.controls').hide();
 }
 
 function cancelChanges(el){
