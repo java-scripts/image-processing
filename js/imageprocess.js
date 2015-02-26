@@ -25,6 +25,10 @@ and callbacks with the orgumnets img, evt
 
 (function(){
 	
+	
+	
+	
+	
 	var hsvToRgb=function(h, s, v) {			
 			h=h/255; s=s/255; v=v/255;
 			var r, g, b;
@@ -78,6 +82,24 @@ and callbacks with the orgumnets img, evt
 
 	var getk=function(x,y,width){
 		return 4*(y*width+x);
+	}
+	
+	var walk=function(options){
+		var settings=$.extend({lengh:0,speed:1000,step:function(x){},oncomplete:function(){}},options);	
+		var i=0;var time = 1000/settings.speed;
+		function step(){			
+			//process
+			settings.step(i);
+			i++;			
+			if(i<settings.lengh){				
+				window.setTimeout(function(){
+					step();
+				},time);
+			}else{
+				settings.oncomplete();
+			}	
+		}
+		step();
 	}
 	
 	impro={		
@@ -134,18 +156,37 @@ and callbacks with the orgumnets img, evt
 				d[i+3]=255;			
 			}		
 		},
-		sketch:function(settings){
+		sketch:function(settings){			
 			var s = settings.src.data;
-			var d = settings.dst.data;						
-			for(var i=0;i<s.length;i+=4){
-				hsb=rgbToHsv(s[i],s[i+1],s[i+2]);
-				rgb=hsvToRgb(step(hsb[0]),step(hsb[1]),step(hsb[2]));		
-				d[i]=rgb[0];	
-				d[i+1]=rgb[1];
-				d[i+2]=rgb[2];	
-							
-			}
-			function step(v){return Math.min(255,Math.round(v/100)*100)}
+			var d = settings.dst.data;
+			var width = settings.src.width;
+			var progressStep = Math.round(width/10)-1;
+			walk({
+				lengh:width,
+				speed:1000,
+				step:function(x){
+					for(y=0;y<settings.src.height;y++){
+						i = getk(x,y,settings.src.width);
+						hsb=rgbToHsv(s[i],s[i+1],s[i+2]);
+						rgb=hsvToRgb(step2(hsb[0]),step2(hsb[1]),step2(hsb[2]));		
+						d[i]=rgb[0];	
+						d[i+1]=rgb[1];
+						d[i+2]=rgb[2];				
+					}
+					//ctx.putImageData(dst,0,0);
+					
+					if(x%progressStep==0){
+						progress.width(x*100/width+'%');					
+					}	
+					
+				},
+				oncomplete:function(){
+					ctx.putImageData(dst,0,0);
+					progress.width('100%');	
+					
+				}	
+			});					
+			function step2(v){return Math.min(255,Math.round(v/100)*100)}
 		},
 		applyFilter:function(settings){			
 			var imageData = settings.src;

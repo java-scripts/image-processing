@@ -16,7 +16,8 @@
 		ctx.drawImage(img,0,0, canvas.width,canvas.height);
 		src = ctx.getImageData(0,0, canvas.width,canvas.height);
 		dst = impro.copyImageData({ctx:ctx,src:src});		
-		ctx.putImageData(dst,0,0);	
+		ctx.putImageData(dst,0,0);
+		progress = $('#progress');
 	}
 	
 }());
@@ -67,7 +68,8 @@ function saveChanges(el){
 
 function cancelChanges(el){
 	$(el).closest('form')[0].reset();
-	ctx.putImageData(src,0,0);	
+	dst = impro.copyImageData({ctx:ctx,src:src});	
+	ctx.putImageData(dst,0,0);	
 }
 
 
