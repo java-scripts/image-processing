@@ -50,6 +50,8 @@
 			   <li><a href="#commonModal"  data-toggle="controls" onclick="$('#commonModal .modal-title').text('Blur');avgBlur();">Blur</a></li>
 			   <li><a href="#commonModal"  data-toggle="controls" onclick="$('#commonModal .modal-title').text('Sharp');sharp();">Sharp</a></li>
 			   <li><a href="#commonModal"  data-toggle="controls" onclick="$('#commonModal .modal-title').text('Sketch');sketch();">Sketch</a></li>
+			   <li><a href="#commonModal"  data-toggle="controls" onclick="$('#commonModal .modal-title').text('Custom Filter 3x3');customFilter(3);">Custom Filter 3x3</a></li>
+			  
               </ul>
             </li>
 			
@@ -209,6 +211,20 @@
 
 				</div>
 				<div class="modal-body">
+					<div id="custom-data-form">
+						<form>
+						<div class="row">
+							<div class="col-md-6 data">
+							
+							</div>
+							<div class="col-md-6 action" >
+								
+							</div>
+						</div>
+						</form>
+						<hr>
+					</div>
+					
 					<div class="progress">
 					  <div class="progress-bar progress-bar-striped active" role="progressbar" id="progress" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
 						<span class="sr-only">0% Complete</span>
