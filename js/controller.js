@@ -16,7 +16,7 @@
 		src = ctx.getImageData(0,0, canvas.width,canvas.height);
 		dst = impro.copyImageData({ctx:ctx,src:src});		
 		ctx.putImageData(dst,0,0);
-		progress = $('#progress');
+		progress = $('.progress-bar');
 		fileName = file.name;
 	}
 	
@@ -72,11 +72,8 @@ function setBrContrast(){
 	ctx.putImageData(dst,0,0);
 }
 
-
-
-
-function edgeDetect(){
-	impro.applyFilterChannel({
+function pencil(){
+	impro.specialFilter({
 		src:src,
 		dst:dst,
 		channel:0,
@@ -84,7 +81,17 @@ function edgeDetect(){
 		f:impro.Filters.EdgeDetect.laplace1,
 		});
 	ctx.putImageData(dst,0,0);	
+}
 
+function blackBoard(){
+	impro.specialFilter({
+		src:src,
+		dst:dst,
+		channel:0,
+		invert:false,
+		f:impro.Filters.EdgeDetect.laplace1,
+		});
+	ctx.putImageData(dst,0,0);	
 }
 
 function avgBlur(){		
@@ -114,24 +121,8 @@ function sketch(){
 	ctx.putImageData(dst,0,0);
 }
 
-function customFilter(n){
-	console.log(n)
-	var t = $('#custom-data-form .data');
-	var a = $('#custom-data-form .action');
-	var html='';
-	 defaultf=[[1,1,1],[1,-8,1],[1,1,1]];
-	 cf=[];
-	for(var i=0;i<n;i++){				
-		for(var j=0;j<n;j++){
-			html+='<input type="text" class="col-md-4 cftext" value="'+defaultf[i][j]+'" style="padding: 1px;">';		
-		}
-	}
-	t.html(html);	
-	html='<button class="btn btn-primary action-btn" >Apply</button> ';
-	html+='<button class="btn btn-primary reset-btn" >Reset</button>';
-	a.html(html);	
-	$('.action-btn').click(function(){
-		cf=[[],[],[]];
+function customFilterApply(el){	
+		var cf=[[],[],[]];
 		$('.cftext').each(function(i){			
 			cf[Math.floor(i/3)].push($(this).val()*1)
 		});
@@ -141,13 +132,28 @@ function customFilter(n){
 			f:cf,
 			});
 		ctx.putImageData(dst,0,0);
-	});
-	
-	$('.reset-btn').click(function(e){
-		$(this).closest('form').reset();
+}
+function customFilterReset(el){
+		$(el).closest('form').reset();
 		dst = impro.copyImageData({ctx:ctx,src:src});	
 		ctx.putImageData(dst,0,0);	
-	});
 }
 
+function hardSheet(){
+	impro.applyFilter({
+		src:src,
+		dst:dst,	
+		f:[[-3,-1,0],[-1,1,1],[0,1,3]]
+		});
+	ctx.putImageData(dst,0,0);
 
+}
+
+function colorGlow(){
+	impro.applyFilter({
+		src:src,
+		dst:dst,	
+		f:[[-1,-1,-1],[-1,8,-1],[-1,-1,-1]]
+		});
+	ctx.putImageData(dst,0,0);
+}
