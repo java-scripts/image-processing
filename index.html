@@ -47,18 +47,21 @@
 			<li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">Filters<span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
-			   <li><a href="#commonModal"  data-toggle="controls" onclick="$('#commonModal .modal-title').text('EdgeDetect');edgeDetect();">EdgeDetect</a></li>
-			   <li><a href="#commonModal"  data-toggle="controls" onclick="$('#commonModal .modal-title').text('Blur');avgBlur();">Blur</a></li>
-			   <li><a href="#commonModal"  data-toggle="controls" onclick="$('#commonModal .modal-title').text('Sharp');sharp();">Sharp</a></li>
-			   <li><a href="#commonModal"  data-toggle="controls" onclick="$('#commonModal .modal-title').text('Sketch');sketch();">Sketch</a></li>
-			   <li><a href="#commonModal"  data-toggle="controls" onclick="$('#commonModal .modal-title').text('Custom Filter 3x3');customFilter(3);">Custom Filter 3x3</a></li>
+				<li><a href="#commonModal"  data-toggle="controls" onclick="$('#commonModal .modal-title').text('Blur');avgBlur();">Blur</a></li>
+			    <li><a href="#commonModal"  data-toggle="controls" onclick="$('#commonModal .modal-title').text('Sharp');sharp();">Sharp</a></li>
+				<li><a href="#commonModal"  data-toggle="controls" onclick="$('#commonModal .modal-title').text('colorGlow');colorGlow();">Color Glow</a></li>				
+				<li><a href="#commonModal"  data-toggle="controls" onclick="$('#commonModal .modal-title').text('Pencil');pencil();">Pencil</a></li>			
+			   <li><a href="#commonModal"  data-toggle="controls" onclick="$('#commonModal .modal-title').text('Sketch Pen');sketch();">Sketch Pen</a></li>			 
+			   <li><a href="#commonModal"  data-toggle="controls" onclick="$('#commonModal .modal-title').text('Hard Sheet');hardSheet();">Hard Sheet</a></li>
+				<li><a href="#commonModal"  data-toggle="controls" onclick="$('#commonModal .modal-title').text('Black Board');blackBoard();">Black Board</a></li>						   
+			   <li><a href="#customFilter"  data-toggle="controls">Custom Filter 3x3</a></li>      
 			  
               </ul>
             </li>
 			
           </ul>
 		  <ul class="nav navbar-nav navbar-right">           
-            <li><a href="https://github.com/java-scripts">	View On GitHub</a></li>
+            <li><a href="https://github.com/java-scripts/image-processing/tree/gh-pages">	View On GitHub</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -203,7 +206,54 @@
 				</div>
 				</form>
 			</div><!-- /.modal-content -->
-	
+			
+			
+			<div id="customFilter" class="modal-content controls" >
+				<form>
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					 <h4 class="modal-title">Custom Filter 3x3</h4>
+
+				</div>
+				<div class="modal-body">
+					<div id="custom-data-form">						
+						<div class="row">
+							<div class="col-md-6 data">
+								<input type="text" class="col-md-4 cftext" value="-1" style="padding: 1px;">
+								<input type="text" class="col-md-4 cftext" value="-1" style="padding: 1px;">
+								<input type="text" class="col-md-4 cftext" value="-1" style="padding: 1px;">
+								
+								<input type="text" class="col-md-4 cftext" value="-1" style="padding: 1px;">
+								<input type="text" class="col-md-4 cftext" value="9" style="padding: 1px;">
+								<input type="text" class="col-md-4 cftext" value="-1" style="padding: 1px;">
+								
+								<input type="text" class="col-md-4 cftext" value="-1" style="padding: 1px;">
+								<input type="text" class="col-md-4 cftext" value="-1" style="padding: 1px;">
+								<input type="text" class="col-md-4 cftext" value="-1" style="padding: 1px;">
+							</div>
+							<div class="col-md-6 action">
+								<button class="btn btn-primary action-btn" onclick="customFilterApply(this);">Apply</button> 
+								<button class="btn btn-primary reset-btn" onclick="customFilterReset(this);" >Reset</button>
+							</div>
+						</div>
+						
+						<hr>
+					</div>
+					
+					<div class="progress">
+					  <div class="progress-bar progress-bar-striped active" role="progressbar" id="progress" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+						<span class="sr-only">0% Complete</span>
+					  </div>
+					</div>
+				</div>
+				<div class="modal-footer">					
+					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancelChanges(this)" >Cancel</button>
+					<button type="button" class="btn btn-primary" onclick="saveChanges(this)">Save changes</button>
+				</div>
+				</form>
+			</div><!-- /.modal-content -->
+			
+			
 			<div id="commonModal" class="modal-content controls" >
 				<form>
 				<div class="modal-header">
@@ -227,7 +277,7 @@
 					</div>
 					
 					<div class="progress">
-					  <div class="progress-bar progress-bar-striped active" role="progressbar" id="progress" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+					  <div class="progress-bar progress-bar-striped active" role="progressbar" id="progress" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
 						<span class="sr-only">0% Complete</span>
 					  </div>
 					</div>
