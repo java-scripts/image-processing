@@ -250,21 +250,18 @@
 <script src="js/imageprocess.js"></script>
 <script src="js/controller.js"></script>
 <script>
-
 $('[data-toggle=controls]').click(function(e){
 	$('.controls').hide();
 	$($(this).attr('href')).show();
-})
+});
 $('[data-dismiss=modal]').click(function(e){
 	$(this).closest('.controls').hide();
-})
-
-
+});
 $('#download').click(function(){
 	var i = fileName.lastIndexOf('.');
-	$(this)[0].download=fileName.substring(0,i)+'_IMPRO'+fileName.substring(i,fileName.length);
-	$(this)[0].href=canvas.toDataURL();    
-})
+	this.download=fileName.substring(0,i)+'_IMPRO'+fileName.substring(i,fileName.length);
+	this.href=canvas.toDataURL();    
+});
 </script>
 </body>
 </html>
