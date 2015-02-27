@@ -6,14 +6,14 @@ and callbacks with the orgumnets img, evt
 		var that = this;
 		return this.change(function(evt) {
 		  var tgt = evt.target || window.event.srcElement,
-			files = tgt.files;
+			files = tgt.files;			
 		  // FileReader support
 		  if (FileReader && files && files.length) {
 			var fr = new FileReader();
 			fr.onload = function() {
 			  var img = new Image();
 			  img.src = fr.result;			 
-			  if(fn)fn.call(that,img, evt);
+			  if(fn)fn.call(that,img,files[0],evt);
 			};
 			fr.readAsDataURL(files[0]);
 		  }

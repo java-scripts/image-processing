@@ -1,9 +1,8 @@
 (function(){
 	canvas = document.getElementById('canvas');
-	ctx = canvas.getContext('2d');
-
-	$('#fileInput').imgSelect(function(img){
-		init(img);
+	ctx = canvas.getContext('2d');	
+	$('#fileInput').imgSelect(function(img,file){		
+		init(img,file);
 	});
 	//img = new Image();
 	//img.src = 'Penguins.jpg';
@@ -11,13 +10,14 @@
 	//	init(img);
 	//}
 	
-	function init(img){	
+	function init(img,file){	
 		canvas.height=img.height*canvas.width/img.width;	
 		ctx.drawImage(img,0,0, canvas.width,canvas.height);
 		src = ctx.getImageData(0,0, canvas.width,canvas.height);
 		dst = impro.copyImageData({ctx:ctx,src:src});		
 		ctx.putImageData(dst,0,0);
 		progress = $('#progress');
+		fileName = file.name;
 	}
 	
 }());

@@ -22,6 +22,7 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">File <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
                 <li><a href="#" onclick="$('#fileInput').click();">Open</a></li>
+				<li><a href="#" id="download" download="processed.png">Download</a></li>
                <!-- <li><a href="#">Save</a></li>
                 <li><a href="#">SaveAs</a></li>-->
                <!-- <li class="divider"></li>
@@ -258,6 +259,12 @@ $('[data-dismiss=modal]').click(function(e){
 	$(this).closest('.controls').hide();
 })
 
+
+$('#download').click(function(){
+	var i = fileName.lastIndexOf('.');
+	$(this)[0].download=fileName.substring(0,i)+'_IMPRO'+fileName.substring(i,fileName.length);
+	$(this)[0].href=canvas.toDataURL();    
+})
 </script>
 </body>
 </html>
