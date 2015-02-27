@@ -218,7 +218,7 @@ and callbacks with the orgumnets img, evt
 					d[k+2]=db;	
 			}
 		},
-		applyFilterChannel:function(settings){			
+		specialFilter:function(settings){			
 			var imageData = settings.src;
 			var s = settings.src.data;
 			var d = settings.dst.data;
