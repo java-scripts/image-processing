@@ -1,41 +1,4 @@
-/*jquery extension to select image from file system 
-and callbacks with the orgumnets img, evt
-*/
-(function($){
-	$.fn.imgSelect = function(fn){	
-		var that = this;
-		return this.change(function(evt) {
-		  var tgt = evt.target || window.event.srcElement,
-			files = tgt.files;			
-		  // FileReader support
-		  if (FileReader && files && files.length) {
-			var fr = new FileReader();
-			fr.onload = function() {
-			  var img = new Image();
-			  img.src = fr.result;			 
-			  if(fn)fn.call(that,img,files[0],evt);
-			};
-			fr.readAsDataURL(files[0]);
-		  }
-		});	
-	}
-	
-	$.fn.reset = function(){
-		if(this[0]){
-			this[0].reset();
-		}
-		return this;
-	}
-	
-}(jQuery));
-
-
-
-(function(){
-	
-	
-	
-	
+(function(){	
 	var hsvToRgb=function(h, s, v) {			
 			h=h/255; s=s/255; v=v/255;
 			var r, g, b;
