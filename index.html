@@ -37,6 +37,8 @@
 				<li><a href="#brContrastModal"  data-toggle="controls">Brighness & Contrast</a></li>              
                 <li><a href="#rgbaModal"  data-toggle="controls">Red,Green,Blue</a></li>
                <li><a href="#hsvModal"  data-toggle="controls">Hue,Saturation,Intensity</a></li>
+			   
+			   
 			   <li><a href="#commonModal"  data-toggle="controls" onclick="$('#commonModal .modal-title').text('Invert');invert();">Invert</a></li>
                <!-- <li class="divider"></li>
                 <li class="dropdown-header">Nav header</li>
@@ -50,11 +52,13 @@
 				<li><a href="#commonModal"  data-toggle="controls" onclick="$('#commonModal .modal-title').text('Blur');avgBlur();">Blur</a></li>
 			    <li><a href="#commonModal"  data-toggle="controls" onclick="$('#commonModal .modal-title').text('Sharp');sharp();">Sharp</a></li>
 				<li><a href="#commonModal"  data-toggle="controls" onclick="$('#commonModal .modal-title').text('colorGlow');colorGlow();">Color Glow</a></li>				
-				<li><a href="#commonModal"  data-toggle="controls" onclick="$('#commonModal .modal-title').text('Pencil');pencil();">Pencil</a></li>			
-			   <li><a href="#commonModal"  data-toggle="controls" onclick="$('#commonModal .modal-title').text('Sketch Pen');sketch();">Sketch Pen</a></li>			 
+				<li><a href="#commonModal"  data-toggle="controls" onclick="$('#commonModal .modal-title').text('Pencil');pencil();">Pencil</a></li>
+				<li><a href="#colorSketch"  data-toggle="controls" onclick="colorSketchApply();">Color Sketch</a></li>
+				<li><a href="#greySketch"  data-toggle="controls" onclick="greySketchApply();">Grey Sketch</a></li>			   
 			   <li><a href="#commonModal"  data-toggle="controls" onclick="$('#commonModal .modal-title').text('Hard Sheet');hardSheet();">Hard Sheet</a></li>
 				<li><a href="#commonModal"  data-toggle="controls" onclick="$('#commonModal .modal-title').text('Black Board');blackBoard();">Black Board</a></li>						   
 			   <li><a href="#customFilter"  data-toggle="controls">Custom Filter 3x3</a></li>      
+			   <li><a href="#customFunction"  data-toggle="controls">Custom Function</a></li>      
 			  
               </ul>
             </li>
@@ -208,6 +212,54 @@
 			</div><!-- /.modal-content -->
 			
 			
+			<div id="colorSketch" class="modal-content controls" >
+				<form>
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					 <h4 class="modal-title">Color Sketch</h4>
+
+				</div>
+				<div class="modal-body">					
+					<div class="row">
+						<div class="col-md-2">
+							Color Levels
+						</div>
+						<div class="col-md-8">
+							<input type="range" id="colorLevels" min="1" max="10" value="3" onchange="colorSketchApply();"><br>
+						</div>						
+					</div>																			
+				</div>
+				<div class="modal-footer">					
+					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancelChanges(this)" >Cancel</button>
+					<button type="button" class="btn btn-primary" onclick="saveChanges(this)">Save changes</button>
+				</div>
+				</form>
+			</div><!-- /.modal-content -->
+			
+			<div id="greySketch" class="modal-content controls" >
+				<form>
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					 <h4 class="modal-title">Grey Sketch</h4>
+
+				</div>
+				<div class="modal-body">					
+					<div class="row">
+						<div class="col-md-2">
+							Grey Levels
+						</div>
+						<div class="col-md-8">
+							<input type="range" id="greyLevels" min="1" max="10" value="3" onchange="greySketchApply();"><br>
+						</div>						
+					</div>																			
+				</div>
+				<div class="modal-footer">					
+					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancelChanges(this)" >Cancel</button>
+					<button type="button" class="btn btn-primary" onclick="saveChanges(this)">Save changes</button>
+				</div>
+				</form>
+			</div><!-- /.modal-content -->
+			
 			<div id="customFilter" class="modal-content controls" >
 				<form>
 				<div class="modal-header">
@@ -253,6 +305,49 @@
 				</form>
 			</div><!-- /.modal-content -->
 			
+			<div id="customFunction" class="modal-content controls" >
+				<form>
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					 <h4 class="modal-title">Custom Function</h4>
+
+				</div>
+				<div class="modal-body">
+					<div id="custom-data-form">						
+						<div class="row">
+							<div class="col-md-12">
+								<textarea id="customFn" class="col-md-12" style="height:200px;">function(data){	
+	s=data.h/2;
+	x=data.x-data.w/2;
+	y=data.y-data.h/2;
+	r=Math.exp(-(x*x+y*y)/s/s)
+	data.r=r*data.r;
+	data.g=r*data.g;
+	data.b=r*data.b;
+	return data;
+}</textarea>
+							</div>
+							<div class="col-md-6">
+								<button class="btn btn-primary" onclick="customFunctionApply(this);">Apply</button> 
+								<button class="btn btn-primary reset-btn" onclick="customFunctionReset(this);" >Reset</button>
+							</div>
+						</div>
+						
+						<hr>
+					</div>
+					
+					<div class="progress">
+					  <div class="progress-bar progress-bar-striped active" role="progressbar" id="progress" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+						<span class="sr-only">0% Complete</span>
+					  </div>
+					</div>
+				</div>
+				<div class="modal-footer">					
+					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancelChanges(this)" >Cancel</button>
+					<button type="button" class="btn btn-primary" onclick="saveChanges(this)">Save changes</button>
+				</div>
+				</form>
+			</div><!-- /.modal-content -->
 			
 			<div id="commonModal" class="modal-content controls" >
 				<form>

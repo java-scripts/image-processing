@@ -83,7 +83,8 @@
 			var d = settings.dst.data;			
 			for(var i=0;i<s.length;i+=4){		
 				d[i]=255-s[i];d[i+1]=255-s[i+1];d[i+2]=255-s[i+2];		
-			}	
+			}
+			return dst;
 		},
 		setRGBA:function(settings){	
 			var s = settings.src.data;
@@ -97,7 +98,8 @@
 				d[i+1]=s[i+1]+g;		
 				d[i+2]=s[i+2]+b;	
 				d[i+3]=a;			
-			}	
+			}
+			return dst;
 		},		
 		setBrContrast:function(settings){
 			var s = settings.src.data;
@@ -109,7 +111,8 @@
 				d[i]=m+(s[i]-m)*c+b;
 				d[i+1]=m+(s[i+1]-m)*c+b;
 				d[i+2]=m+(s[i+2]-m)*c+b;			
-			}	
+			}
+			return dst;
 		},
 		setHSV:function(settings){
 			var src = settings.src.data;
@@ -124,43 +127,89 @@
 				d[i+1]=rgb[1];
 				d[i+2]=rgb[2];
 				d[i+3]=255;			
-			}		
-		},
-		sketch:function(settings){
-			var s = settings.src.data;
-			var d = settings.dst.data;						
-			for(var i=0;i<s.length;i+=4){
-				hsb=rgbToHsv(s[i],s[i+1],s[i+2]);
-				rgb=hsvToRgb(step(hsb[0]),step(hsb[1]),step(hsb[2]));		
-				d[i]=rgb[0];	
-				d[i+1]=rgb[1];
-				d[i+2]=rgb[2];	
-							
 			}
-			function step(v){return Math.min(255,Math.round(v/100)*100)}
+			return dst;
+		},
+		colorLevel:function(settings){
+			var s = settings.src.data;
+			var d = settings.dst.data;
+			var n = 255/settings.n;
+			for(var i=0;i<s.length;i+=4){
+				d[i]=n*Math.round(s[i]/n);	
+				d[i+1]=n*Math.round(s[i+1]/n);
+				d[i+2]=n*Math.round(s[i+2]/n);							
+			}
+			return dst;
+		},
+		greyLevel:function(settings){			
+			var s = settings.src.data;
+			var d = settings.dst.data;
+			var n = 255/settings.n;	
+
+				
+			for(var i=0;i<s.length;i+=4){	
+				hsb=rgbToHsv(s[i],s[i+1],s[i+2]);
+				k=hsvToRgb(hsb[0],0,hsb[2])[0];				
+				k=n*Math.round(k/n);	
+				d[i]=k;	d[i+1]=k;	d[i+2]=k;
+			}
+			return dst;
+		},
+		customFunction:function(settings){
+			var _s = settings.src.data;
+			var _d = settings.dst.data;			
+			var _fn = settings.fn;
+			var _w = settings.src.width;
+			var _h = settings.src.height;
+			var progressStep = Math.round(_w/10)-1;
+			walk({
+				lengh:_w,
+				speed:10000,
+				step:function(_x){
+					for(_y=0;_y<_h;_y++){
+						_k = getk(_x,_y,_w);
+						resultData=_fn({x:_x,y:_y,w:_w,h:_h,r:_s[_k],g:_s[_k+1],b:_s[_k+2],a:_s[_k+3]});	
+						_d[_k]=resultData.r;
+						_d[_k+1]=resultData.g;
+						_d[_k+2]=resultData.b;
+						_d[_k+3]=resultData.a;
+					}
+					ctx.putImageData(dst,0,0);
+					if(_x%progressStep==0){
+						progress.width(_x*100/_w+'%');					
+					}
+				},
+				oncomplete:function(){
+					ctx.putImageData(dst,0,0);
+					progress.width('100%');						
+				}
+			});
+			return dst;
 		},
 		applyFilter:function(settings){			
 			var imageData = settings.src;
 			var s = settings.src.data;
 			var d = settings.dst.data;
 			var f = settings.f;		
-			var w = imageData.width;			
+			var w = imageData.width;
+			var showProgress=settings.showProgress;
 			var progressStep = Math.round(w/10)-1;
 			walk({
 				lengh:w,
 				speed:10000,
 				step:function(x){			
-					for(y=0;y<settings.src.height;y++){
-						i = getk(x,y,w);
+					for(y=0;y<settings.src.height;y++){						
 						filterOnpixel(x,y);	
+					}					
+					if(showProgress){
+						ctx.putImageData(dst,0,0);
 					}
-					ctx.putImageData(dst,0,0);
-					if(x%progressStep==0){
+					if(x%progressStep==0){						
 						progress.width(x*100/w+'%');					
 					}	
 				},
 				oncomplete:function(){
-					ctx.putImageData(dst,0,0);
+					if(settings.oncomplete)settings.oncomplete(dst);					
 					progress.width('100%');						
 				}	
 			})			
@@ -180,34 +229,7 @@
 					d[k+1]=dg;
 					d[k+2]=db;	
 			}
-		},
-		specialFilter:function(settings){			
-			var imageData = settings.src;
-			var s = settings.src.data;
-			var d = settings.dst.data;
-			var f = settings.f;		
-			var w = imageData.width;
-			var invert = settings.invert;
-			var channel = settings.channel||0;
-			for (x=0;x<imageData.width; x++) {
-				for(y=0;y<imageData.height;y++){					
-					k = getk(x,y,w);					
-					d[k]=0;	d[k+1]=0;d[k+2]=0;					
-					dr=0;
-					xcenter=(f.length-1)/2;
-					ycenter=(f[0].length-1)/2;
-					for(var i=0;i<f.length;i++){
-						for(var j=0;j<f[0].length;j++){	
-							sv=s[getk(x-xcenter+i,y-ycenter+j,w)+channel];
-							if(sv)dr+=(f[i][j]*sv);							
-						}				
-					}				
-					dr=invert?255-dr:dr;
-					//d[k+channel]=dr;					
-					d[k]=dr;d[k+1]=dr;d[k+2]=dr;				
-				}
-			}		
-		},
+		},		
 		Filters:{
 			EdgeDetect:{
 				laplace1:[[0,-1,0],[-1,4,-1],[0,-1,0]],

@@ -99,36 +99,41 @@ function setBrContrast(){
 	ctx.putImageData(dst,0,0);
 }
 
-function pencil(){
-	impro.specialFilter({
-		src:src,
-		dst:dst,
-		channel:0,
-		invert:true,
-		f:impro.Filters.EdgeDetect.laplace1,
-		});
-	ctx.putImageData(dst,0,0);	
-}
+
 
 function blackBoard(){
-	impro.specialFilter({
+	impro.applyFilter({
 		src:src,
-		dst:dst,
-		channel:0,
-		invert:false,
+		dst:dst,		
 		f:impro.Filters.EdgeDetect.laplace1,
-		});
-	ctx.putImageData(dst,0,0);	
+		oncomplete:function(src){
+			src = impro.setHSV({src:src,dst:dst,h:0,s:0,v:2});			
+			ctx.putImageData(dst,0,0);	
+		}
+	});
 }
-
+function pencil(){
+	impro.applyFilter({
+		src:src,
+		dst:dst,		
+		f:impro.Filters.EdgeDetect.laplace1,
+		oncomplete:function(src){
+			src = impro.setHSV({src:src,dst:dst,h:0,s:0,v:2});
+			dst = impro.invert({src:src,dst:dst});
+			ctx.putImageData(dst,0,0);	
+		}
+	});	
+}
 function avgBlur(){		
 	impro.applyFilter({
 		src:src,
 		dst:dst,
 		f:impro.Filters.getAvgBlurFilter(5),
-		});
-	ctx.putImageData(dst,0,0);
-
+		showProgress:true,
+		oncomplete:function(dst){
+			ctx.putImageData(dst,0,0);
+		}
+	});
 }
 
 function sharp(){
@@ -136,21 +141,55 @@ function sharp(){
 		src:src,
 		dst:dst,	
 		f:impro.Filters.Sharp.laplace1,
-		});
-	ctx.putImageData(dst,0,0);
+		showProgress:true,
+		oncomplete:function(dst){
+			ctx.putImageData(dst,0,0);
+		}
+	});	
 }
-function sketch(){
-	impro.sketch({
+function colorSketchApply(){
+	impro.colorLevel({
 		src:src,
-		dst:dst,	
-		f:impro.Filters.Sharp.laplace1,
+		dst:dst,		
+		n:$('#colorLevels').val()*1,
 		});
 	ctx.putImageData(dst,0,0);
 }
 
-function customFilterApply(el){
-		
-		console.log('customFilter...')
+function greySketchApply(){
+	impro.greyLevel({
+		src:src,
+		dst:dst,			
+		n:$('#greyLevels').val()*1,
+		});
+	ctx.putImageData(dst,0,0);
+}
+
+function hardSheet(){
+	impro.applyFilter({
+		src:src,
+		dst:dst,	
+		f:[[-3,-1,0],[-1,1,1],[0,1,3]],
+		showProgress:true,
+		oncomplete:function(dst){
+			ctx.putImageData(dst,0,0);
+		}
+	});
+}
+
+function colorGlow(){
+	impro.applyFilter({
+		src:src,
+		dst:dst,	
+		f:[[-1,-1,-1],[-1,8,-1],[-1,-1,-1]],
+		showProgress:true,
+		oncomplete:function(dst){
+			ctx.putImageData(dst,0,0);
+		}
+	});	
+}
+
+function customFilterApply(el){		
 		var cf=[[],[],[]];
 		$('.cftext').each(function(i){			
 			cf[Math.floor(i/3)].push($(this).val()*1)
@@ -159,8 +198,12 @@ function customFilterApply(el){
 			src:src,
 			dst:dst,	
 			f:cf,
-			});
-		ctx.putImageData(dst,0,0);
+			showProgress:true,
+			oncomplete:function(dst){
+				ctx.putImageData(dst,0,0);
+			}
+		});
+		
 }
 function customFilterReset(el){		
 		$(el).closest('form').reset();
@@ -168,21 +211,20 @@ function customFilterReset(el){
 		ctx.putImageData(dst,0,0);	
 }
 
-function hardSheet(){
-	impro.applyFilter({
+function customFunctionApply(el){	
+	fn=$('#customFn').val();	
+	eval("fn="+fn);
+	console.log(fn)
+	impro.customFunction({
 		src:src,
 		dst:dst,	
-		f:[[-3,-1,0],[-1,1,1],[0,1,3]]
-		});
+		fn:fn,
+	});
 	ctx.putImageData(dst,0,0);
-
 }
 
-function colorGlow(){
-	impro.applyFilter({
-		src:src,
-		dst:dst,	
-		f:[[-1,-1,-1],[-1,8,-1],[-1,-1,-1]]
-		});
-	ctx.putImageData(dst,0,0);
+function customFunctionReset(el){		
+		$(el).closest('form').reset();
+		dst = impro.copyImageData({ctx:ctx,src:src});	
+		ctx.putImageData(dst,0,0);	
 }
