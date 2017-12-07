@@ -10,8 +10,10 @@
 			var fr = new FileReader();
 			fr.onload = function() {
 			  var img = new Image();
-			  img.src = fr.result;			 
-			  if(fn)fn.call(that,img,files[0],evt);
+			  img.src = fr.result;	
+			  img.onload = function() {
+			     if(fn)fn.call(that,img,files[0],evt);
+			  };
 			};
 			fr.readAsDataURL(files[0]);
 		  }
